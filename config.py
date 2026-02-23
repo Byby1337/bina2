@@ -33,7 +33,7 @@ CRYPTO_PAY_BASE_URL = "https://testnet-pay.crypt.bot/api" if CRYPTO_PAY_TESTNET 
 
 # Пакеты подписок: ключ -> (название, базовая цена в USD)
 SIGNAL_PACKAGES = {
-    "week": ("Неделя", 30),
+    "week": ("Неделя", 1),
     "two_weeks": ("Две недели", 50),
     "month": ("Месяц", 75),
     "two_months": ("Два месяца", 135),
