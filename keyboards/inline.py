@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from config import SESSION_OPTIONS, SIGNAL_PACKAGES, DESIGN_IDS
+from config import SESSION_OPTIONS, SESSION_SURCHARGE, SIGNAL_PACKAGES, DESIGN_IDS
 
 
 def main_menu_kb() -> InlineKeyboardMarkup:
@@ -19,8 +19,13 @@ def main_menu_kb() -> InlineKeyboardMarkup:
 def sessions_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for n in SESSION_OPTIONS:
+        extra = SESSION_SURCHARGE.get(n, 0)
+        base_text = "сессия" if n == 1 else "сессии"
+        text = f"{n} {base_text} в день"
+        if extra > 0:
+            text += f" (+${extra} к подписке)"
         builder.row(
-            InlineKeyboardButton(text=f"{n} сессий", callback_data=f"session:{n}"),
+            InlineKeyboardButton(text=text, callback_data=f"session:{n}"),
         )
     builder.row(InlineKeyboardButton(text="◀️ В меню", callback_data="menu:main"))
     return builder.as_markup()

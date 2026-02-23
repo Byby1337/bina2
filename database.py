@@ -91,14 +91,14 @@ async def get_user_custom_styles(user_id: int):
 # --- Заказы и оплата Crypto Pay ---
 
 async def create_order_with_invoice(
-    user_id: int, package_key: str, amount: float, invoice_id: int
+    user_id: int, package_key: str, amount: float, invoice_id: int, sessions: int | None = None
 ) -> int:
     from datetime import datetime
     async with aiosqlite.connect(DB_PATH) as db:
         cursor = await db.execute(
-            """INSERT INTO orders (user_id, package_key, amount, status, invoice_id, created_at)
-               VALUES (?, ?, ?, 'pending_payment', ?, ?)""",
-            (user_id, package_key, amount, invoice_id, datetime.utcnow().isoformat()),
+            """INSERT INTO orders (user_id, sessions, package_key, amount, status, invoice_id, created_at)
+               VALUES (?, ?, ?, ?, 'pending_payment', ?, ?)""",
+            (user_id, sessions, package_key, amount, invoice_id, datetime.utcnow().isoformat()),
         )
         await db.commit()
         return cursor.lastrowid

@@ -31,16 +31,24 @@ CRYPTO_PAY_API_TOKEN = os.getenv("CRYPTO_PAY_API_TOKEN", "")
 CRYPTO_PAY_TESTNET = os.getenv("CRYPTO_PAY_TESTNET", "").lower() in ("1", "true", "yes")
 CRYPTO_PAY_BASE_URL = "https://testnet-pay.crypt.bot/api" if CRYPTO_PAY_TESTNET else "https://pay.crypt.bot/api"
 
-# Пакеты сигналов: название -> (количество сигналов, цена в USD)
+# Пакеты подписок: ключ -> (название, базовая цена в USD)
 SIGNAL_PACKAGES = {
-    "small": ("10 сигналов", 15),
-    "medium": ("30 сигналов", 35),
-    "large": ("50 сигналов", 50),
-    "mega": ("100 сигналов", 85),
+    "week": ("Неделя", 30),
+    "two_weeks": ("Две недели", 50),
+    "month": ("Месяц", 75),
+    "two_months": ("Два месяца", 135),
 }
 
-# Варианты количества сессий
-SESSION_OPTIONS = [1, 3, 5, 10, 20]
+# Варианты количества сессий в день
+SESSION_OPTIONS = [1, 2, 3, 4]
+
+# Наценка к базовой цене подписки в зависимости от числа сессий в день
+SESSION_SURCHARGE = {
+    1: 0,
+    2: 5,
+    3: 8,
+    4: 10,
+}
 
 # ID дизайнов под биржи
 DESIGN_IDS = {
