@@ -1,11 +1,27 @@
+"""
+Entry point для запуска бота как модуля `app.main`.
+
+Важно: добавляем корень проекта в `sys.path`, чтобы модули `config`, `database`, `handlers` корректно импортировались
+при запуске `python -m app.main` или при деплое на хостинги, которые ожидают модуль `app`.
+"""
+
 import asyncio
 import logging
+import sys
+from pathlib import Path
+
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from config import BOT_TOKEN
-from database import init_db
-from handlers import (
+
+# Гарантируем, что корень проекта есть в sys.path
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from config import BOT_TOKEN  # noqa: E402
+from database import init_db  # noqa: E402
+from handlers import (  # noqa: E402
     start_router,
     menu_router,
     sessions_router,
@@ -34,5 +50,10 @@ async def main():
     await dp.start_polling(bot)
 
 
-if __name__ == "__main__":
+def run():
     asyncio.run(main())
+
+
+if __name__ == "__main__":
+    run()
+
