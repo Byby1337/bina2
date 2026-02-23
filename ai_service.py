@@ -4,7 +4,7 @@
 """
 from openai import AsyncOpenAI, DefaultAsyncHttpxClient
 from config import OPENAI_API_KEY, OPENAI_API_BASE_URL, OPENAI_API_TIMEOUT, OPENAI_PROXY
-
+import aiofiles
 _client: AsyncOpenAI | None = None
 
 
@@ -106,3 +106,26 @@ async def generate_signal_with_template(design_id: str) -> tuple[str, str, str, 
         elif line.upper().startswith("NOTE:"):
             note = line.split(":", 1)[1].strip()
     return asset, direction, timeframe, note
+
+
+async def generate_image_from_style(
+    client: AsyncOpenAI,
+    style_image_path: str,  # путь к твоей картинке-стилю
+    prompt_text: str        # текст, который нужно добавить
+) -> str:
+    """
+    Генерирует картинку с текстом в стиле заданного изображения.
+    Возвращает URL с результатом.
+    """
+    # читаем изображение в бинарном виде
+    async with aiofiles.open(style_image_path, "rb") as f:
+        style_image = await f.read()
+
+    response = await client.images.edit(
+        image=style_image,
+        prompt=prompt_text,
+        n=1,
+        size="1024x1024",  # можно менять
+    )
+
+    return response.data[0].url
